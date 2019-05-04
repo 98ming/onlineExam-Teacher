@@ -38,7 +38,8 @@
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
-    "element-ui": "^2.5.4",
+    "echarts": "^4.2.1",
+    "element-ui": "^2.8.2",
     "jquery": "^1.12.4",
     "mint-ui": "^2.2.13",
     "moment": "^2.24.0",

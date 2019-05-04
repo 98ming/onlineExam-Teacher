@@ -37,8 +37,12 @@
         <h3>修改个人信息</h3>
     </div>
 </template>
-
-<script></script>
-<style lang="scss" scoped>
-
-</style>
+<script>
+    export default {
+        data() {
+            return {};
+        },
+        methods: {}
+    }
+</script>
+<style lang="scss"></style>
