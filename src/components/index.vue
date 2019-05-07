@@ -102,6 +102,9 @@
                                 <el-menu-item index="1-1">
                                     <router-link to="/kmeans" tag="li">k-means</router-link>
                                 </el-menu-item>
+                                <el-menu-item index="1-6">
+                                    <router-link to="/kmedoide" tag="li">k-medoide</router-link>
+                                </el-menu-item>
                                 <el-menu-item index="1-2">
                                     <router-link to="/DBSCAN" tag="li">DBSCAN</router-link>
                                 </el-menu-item>

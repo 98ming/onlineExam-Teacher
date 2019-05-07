@@ -12,6 +12,7 @@ import classBayes from './components/bar/classBayes.vue'
 import studentBayes from './components/bar/studentBayes.vue'
 import apriori from './components/bar/Apriori.vue'
 import kmeans from './components/bar/k-means.vue'
+import kmedoide from './components/bar/k-medoide.vue'
 import DBSCAN from './components/bar/DBSCAN.vue'
 import groupPaper from './components/bar/groupPaper.vue'
 import releasePaper from './components/bar/releasePaper.vue'
@@ -39,6 +40,7 @@ var router = new VueRouter({
                 {path : '/classAnalyse' , component : classBayes},
                 {path : '/studentAnalyse' , component : studentBayes},
                 {path : '/kmeans' , component : kmeans},
+                {path : '/kmedoide' , component : kmedoide},
                 {path : '/DBSCAN' , component : DBSCAN},
                 {path : '/apriori' , component : apriori},
                 {path : '/updateMyInfo' , component: updateMyInfo},

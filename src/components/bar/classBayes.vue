@@ -22,13 +22,13 @@
     export default {
         data(){
             return{
-                data1:[{name:"优秀", value:255},
-                      {name:"中等", value:150},
-                      {name:"不及格", value:30}
+                data1:[{name:"优秀", value:40},
+                      {name:"中等", value:15},
+                      {name:"不及格", value:3}
                     ],
                 data2:[
-                    {name:"正确率",value:60},
-                    {name:"错误率",value:40}
+                    {name:"正确率",value:80},
+                    {name:"错误率",value:20}
                 ],
                 restaurants: [],
                 state: '',

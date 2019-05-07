@@ -2,12 +2,12 @@
     <div class="bayes-container">
         <div style="display: block">
             <el-autocomplete
-                    v-model="state"
+                    v-model="id"
                     :fetch-suggestions="querySearchAsync"
                     placeholder="请输入学号"
                     @select="handleSelect"
             ></el-autocomplete>
-            <el-button type="primary" round>开始预测</el-button>
+            <el-button type="primary" round @click="startBayes">开始预测</el-button>
         </div>
         <div style="display: flex">
             <radar :data="data1" :tid="1" :name="'学生属性'"></radar>
@@ -25,30 +25,37 @@
             return{
                 data1:[1200,5,0.6,500],
                 data2:[
-                    {name:"优秀率",value:80},
-                    {name:"及格率",value:10},
-                    {name:"挂科率",value:10},
+                    {name:"优秀率",value:1.8988125E-6},
+                    {name:"及格率",value:2.19770570092528E-4},
+                    {name:"挂科率",value:1.3695932376E-7},
                 ],
                 legend1:['视频时长','做题次数','正确率','做题时长'],
                 legend2:['优秀率','及格率','挂科率'],
-                restaurants: [],
-                state: '',
+                students: [],
+                id: '',
                 timeout:  null
             }
+        },
+        created(){
+            /*this.$http.get('').then(result=>{
+                if(result.body.status === 200){
+
+                }
+            })*/
         },
         methods:{
             loadAll() {
                 return [
-                    { "value": "1614010512--张航铭"},
-                    { "value": "1614010628--郭灏"},
-                    { "value": "1614010751--贾文兵"},
-                    { "value": "1614010301--郑倩荣"},
-                    { "value": "1614010317--刘小兵"},
+                    { "value": "1614010512--张航铭" , id : "1614010512"},
+                    { "value": "1614010628--郭灏" , id : "1614010628"},
+                    { "value": "1614010751--贾文兵" , id : "1614010751"},
+                    { "value": "1614010301--郑倩荣" , id : "1614010301"},
+                    { "value": "1614010317--刘小兵" , id : "1614010317"},
                 ];
             },
             querySearchAsync(queryString, cb) {
-                var restaurants = this.restaurants;
-                var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants;
+                var students = this.students;
+                var results = queryString ? students.filter(this.createStateFilter(queryString)) : students;
 
                 clearTimeout(this.timeout);
                 this.timeout = setTimeout(() => {
@@ -62,10 +69,17 @@
             },
             handleSelect(item) {
                 console.log(item);
+            },
+            startBayes(){
+                this.$http.post('',).then(result=>{
+                    if(result.body.status === 200){
+
+                    }
+                })
             }
         },
         mounted() {
-            this.restaurants = this.loadAll();
+            this.students = this.loadAll();
         },
         components:{
             piecircle,

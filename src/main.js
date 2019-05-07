@@ -65,7 +65,7 @@ var store = new Vuex.Store({
 
 
 // 设置请求根路径
-Vue.http.options.root='http://192.168.0.1:8080/'
+Vue.http.options.root='http://192.168.1.107:8080/'
 // 全局设置 post 时候表单数据格式组织形式
 Vue.http.options.emulateJSON = true
 
