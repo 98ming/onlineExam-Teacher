@@ -1,8 +1,8 @@
 <template>
     <div>
-        <scatter :tid="8" :data="data1"></scatter>
-        <scatter :tid="9" :data="data2"></scatter>
-        <scatter :tid="10" :data="data3"></scatter>
+        <scatter :tid="'kmeans1'" :data="data1"></scatter>
+        <scatter :tid="'kmeans2'" :data="data2"></scatter>
+        <scatter :tid="'kmeans3'" :data="data3"></scatter>
     </div>
 </template>
 

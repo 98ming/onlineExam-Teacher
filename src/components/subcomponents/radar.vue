@@ -15,44 +15,54 @@
         },
         props:['data','tid','name'],
         mounted() {
-            // 基于准备好的dom，初始化echarts实例
-            var myChart = echarts.init(document.getElementById(this.id));
-            // 绘制图表
-            myChart.setOption({
-                backgroundColor: 'white',
-                title: {
-                    text: this.$props.name,
-                    x:'center'
-                },
-                tooltip: {},
-                radar: {
-                    // shape: 'circle',
-                    name: {
-                        textStyle: {
-                            color: '#fff',
-                            backgroundColor: '#999',
-                            borderRadius: 3,
-                            padding: [3, 5]
-                        }
+            this.echarts()
+        },
+        methods:{
+            echarts(){
+                // 基于准备好的dom，初始化echarts实例
+                var myChart = echarts.init(document.getElementById(this.id));
+                // 绘制图表
+                myChart.setOption({
+                    backgroundColor: 'white',
+                    title: {
+                        text: this.$props.name,
+                        x:'center'
                     },
-                    indicator: [
-                        { name: '视频时长', max: 2000},
-                        { name: '做题次数', max: 10},
-                        { name: '正确率', max: 1},
-                        { name: '做题时长', max: 2000},
-                    ]
-                },
-                series: [{
-                    type: 'radar',
-                    // areaStyle: {normal: {}},
-                    data : [
-                        {
-                            name : "学生属性",
-                            value : this.$props.data,
-                        }
-                    ]
-                }]
-            });
+                    tooltip: {},
+                    radar: {
+                        // shape: 'circle',
+                        name: {
+                            textStyle: {
+                                color: '#fff',
+                                backgroundColor: '#999',
+                                borderRadius: 3,
+                                padding: [3, 5]
+                            }
+                        },
+                        indicator: [
+                            { name: '视频时长', max: 2000},
+                            { name: '做题次数', max: 10},
+                            { name: '正确率', max: 100},
+                            { name: '做题时长', max: 2000},
+                        ]
+                    },
+                    series: [{
+                        type: 'radar',
+                        // areaStyle: {normal: {}},
+                        data : [
+                            {
+                                name : "学生属性",
+                                value : this.$props.data,
+                            }
+                        ]
+                    }]
+                });
+            }
+        },
+        watch:{
+            data(){
+                this.echarts();
+            }
         }
     }
 

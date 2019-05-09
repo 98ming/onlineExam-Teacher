@@ -7,7 +7,6 @@
                     placeholder="请输入学号"
                     @select="handleSelect"
             ></el-autocomplete>
-            <el-button type="primary" round @click="startBayes">开始预测</el-button>
         </div>
         <div style="display: flex">
             <radar :data="data1" :tid="1" :name="'学生属性'"></radar>
@@ -23,12 +22,13 @@
     export default {
         data(){
             return{
-                data1:[1200,5,0.6,500],
+                data1:[1200,5,60,500],
                 data2:[
-                    {name:"优秀率",value:1.8988125E-6},
-                    {name:"及格率",value:2.19770570092528E-4},
-                    {name:"挂科率",value:1.3695932376E-7},
+                    {name:"优秀率",value:80},
+                    {name:"及格率",value:20},
+                    {name:"挂科率",value:10},
                 ],
+                data3:[],
                 legend1:['视频时长','做题次数','正确率','做题时长'],
                 legend2:['优秀率','及格率','挂科率'],
                 students: [],
@@ -37,21 +37,20 @@
             }
         },
         created(){
-            /*this.$http.get('').then(result=>{
-                if(result.body.status === 200){
-
-                }
-            })*/
+            this.$http.get('algorithm/getUser').then(result=>{
+                var da = [];
+                result.body.forEach(item=>{
+                    var i = {}
+                    i.value = item.name;
+                    i.id = item.id
+                    da.push(i)
+                })
+                this.data3 = da
+            })
         },
         methods:{
             loadAll() {
-                return [
-                    { "value": "1614010512--张航铭" , id : "1614010512"},
-                    { "value": "1614010628--郭灏" , id : "1614010628"},
-                    { "value": "1614010751--贾文兵" , id : "1614010751"},
-                    { "value": "1614010301--郑倩荣" , id : "1614010301"},
-                    { "value": "1614010317--刘小兵" , id : "1614010317"},
-                ];
+                return this.data3;
             },
             querySearchAsync(queryString, cb) {
                 var students = this.students;
@@ -60,7 +59,7 @@
                 clearTimeout(this.timeout);
                 this.timeout = setTimeout(() => {
                     cb(results);
-                }, 1000 * Math.random());
+                }, 500 * Math.random());
             },
             createStateFilter(queryString) {
                 return (state) => {
@@ -68,15 +67,19 @@
                 };
             },
             handleSelect(item) {
-                console.log(item);
-            },
-            startBayes(){
-                this.$http.post('',).then(result=>{
-                    if(result.body.status === 200){
+                this.$http.post('algorithm/bayes',JSON.stringify({id:item.id})).then(result=>{
+                    var da = [];
+                    da.push(result.body.videoDuration)
+                    da.push(result.body.exerciseNum)
+                    da.push(result.body.accuracy)
+                    da.push(result.body.exerciseTime)
+                    this.data1 = da
+                    this.data2.forEach((item,i)=>{
+                        item.value = result.body.data[i]
+                    })
 
-                    }
                 })
-            }
+            },
         },
         mounted() {
             this.students = this.loadAll();
@@ -84,6 +87,11 @@
         components:{
             piecircle,
             radar
+        },
+        watch:{
+            data3(){
+                this.students = this.data3
+            }
         }
     }
 

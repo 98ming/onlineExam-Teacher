@@ -10,8 +10,7 @@
     export default {
         data(){
             return{
-                id:this.$props.tid,
-                person : this.$props.data
+                id:this.$props.tid
             }
         },
         props:['data','tid'],

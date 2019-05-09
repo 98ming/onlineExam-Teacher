@@ -491,7 +491,7 @@
             margin-bottom: 10px;
             margin-left: 50px;
             padding: 5px 10px;
-            min-width: 1100px;
+            width: 1100px;
             min-height: 520px;
             float: left;
         }

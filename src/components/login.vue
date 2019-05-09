@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div id="container">
+        <div ref="container" id="container" @touchstart="" @touchmove="">
             <div id="login">
                 <div id="top_login">
                     <span>在线测评登录</span>
@@ -43,9 +43,22 @@
 </template>
 
 <script>
-    import * as Three from 'three'
+    // import * as Three from 'three'
+    // var Three = require("three-js")(); // return THREE JS
+    const Three = THREE;
+    var SEPARATION = 100, AMOUNTX = 50, AMOUNTY = 50;
+
+    var container;
+    var camera, scene, renderer;
+
+    var particles, particle, count = 0;
+
+    var mouseX = 0, mouseY = 0;
+
+    var windowHalfX = window.innerWidth / 2;
+    var windowHalfY = window.innerHeight / 2;
+
     export default {
-        name: 'ThreeTest',
         data() {
             return {
                 camera: null,
@@ -81,30 +94,138 @@
 
             },
             init: function() {
-                let container = document.getElementById('container');
+                container = this.$refs.container;
+                // container = document.createElement( 'div' );
+                // document.body.appendChild( container );
+                camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+                camera.position.z = 1000;
 
-                this.camera = new Three.PerspectiveCamera(70, container.clientWidth/container.clientHeight, 0.01, 10);
-                this.camera.position.z = 1;
+                scene = new THREE.Scene();
 
-                this.scene = new Three.Scene();
+                particles = new Array();
 
-                let geometry = new Three.BoxGeometry(0.2, 0.2, 0.2);
-                let material = new Three.MeshNormalMaterial();
+                var PI2 = Math.PI * 2;
+                var material = new THREE.ParticleCanvasMaterial( {
 
-                this.mesh = new Three.Mesh(geometry, material);
-                this.scene.add(this.mesh);
+                    color: 0xffffff,
+                    program: function ( context ) {
 
-                this.renderer = new Three.WebGLRenderer({antialias: true});
-                this.renderer.setSize(container.clientWidth, container.clientHeight);
-                container.appendChild(this.renderer.domElement);
+                        context.beginPath();
+                        context.arc( 0, 0, 1, 0, PI2, true );
+                        context.fill();
+
+                    }
+
+                } );
+
+                var i = 0;
+
+                for ( var ix = 0; ix < AMOUNTX; ix ++ ) {
+
+                    for ( var iy = 0; iy < AMOUNTY; iy ++ ) {
+
+                        particle = particles[ i ++ ] = new THREE.Particle( material );
+                        particle.position.x = ix * SEPARATION - ( ( AMOUNTX * SEPARATION ) / 2 );
+                        particle.position.z = iy * SEPARATION - ( ( AMOUNTY * SEPARATION ) / 2 );
+                        scene.add( particle );
+
+                    }
+
+                }
+
+                renderer = new THREE.CanvasRenderer();
+                // alert(window.innerHeight)
+                renderer.setSize( window.innerWidth, window.innerHeight );
+                container.appendChild( renderer.domElement );
+
+                document.addEventListener( 'mousemove', this.onDocumentMouseMove, false );
+                document.addEventListener( 'touchstart', this.onDocumentTouchStart, false );
+                document.addEventListener( 'touchmove', this.onDocumentTouchMove, false );
+
+                //
+
+                window.addEventListener( 'resize', this.onWindowResize, false );
 
             },
-            animate: function() {
+            onWindowResize() {
+
+                windowHalfX = window.innerWidth / 2;
+                windowHalfY = window.innerHeight / 2;
+
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+
+                renderer.setSize( window.innerWidth, window.innerHeight );
+
+            },
+            onDocumentMouseMove( event ) {
+
+                mouseX = event.clientX - windowHalfX;
+                mouseY = event.clientY - windowHalfY;
+
+            },
+            onDocumentTouchStart( event ) {
+
+                if ( event.touches.length === 1 ) {
+
+                    // event.preventDefault();
+
+                    mouseX = event.touches[ 0 ].pageX - windowHalfX;
+                    mouseY = event.touches[ 0 ].pageY - windowHalfY;
+
+                }
+
+            },
+            onDocumentTouchMove( event ) {
+
+                if ( event.touches.length === 1 ) {
+
+                    event.preventDefault();
+                    mouseX = event.touches[ 0 ].pageX - windowHalfX;
+                    mouseY = event.touches[ 0 ].pageY - windowHalfY;
+
+                }
+
+            },
+            animate() {
+
+                requestAnimationFrame( this.animate);
+
+                this.render();
+
+
+            },
+            render() {
+
+                camera.position.x += ( mouseX - camera.position.x ) * .05;
+                camera.position.y += ( - mouseY - camera.position.y ) * .05;
+                camera.lookAt( scene.position );
+
+                var i = 0;
+
+                for ( var ix = 0; ix < AMOUNTX; ix ++ ) {
+
+                    for ( var iy = 0; iy < AMOUNTY; iy ++ ) {
+
+                        particle = particles[ i++ ];
+                        particle.position.y = ( Math.sin( ( ix + count ) * 0.3 ) * 50 ) + ( Math.sin( ( iy + count ) * 0.5 ) * 50 );
+                        particle.scale.x = particle.scale.y = ( Math.sin( ( ix + count ) * 0.3 ) + 1 ) * 2 + ( Math.sin( ( iy + count ) * 0.5 ) + 1 ) * 2;
+
+                    }
+
+                }
+
+                renderer.render( scene, camera );
+
+                count += 0.1;
+
+            },
+            /*animate: function() {
                 requestAnimationFrame(this.animate);
                 this.mesh.rotation.x += 0.01;
                 this.mesh.rotation.y += 0.02;
                 this.renderer.render(this.scene, this.camera);
-            },
+            },*/
             validate(){
                 var flag = false
                 if(this.username == ''){
@@ -133,6 +254,7 @@
 <style scoped lang="scss">
     #container {
         height: 632px;
+        background: black;
     }
     body{background-color: rgba(0, 0, 0, 1);margin: 0px;overflow: hidden;}
     a{color:#0078ff;}
