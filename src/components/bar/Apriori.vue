@@ -15,7 +15,7 @@
             }
         },
         created(){
-          this.$http.get('CourseAssociation/getCourseAssociationRule').then(result=>{
+          this.$http.get('algorithm/getCourseAssociationRule').then(result=>{
                 if(result.body.status === 200){
                     console.log(result.body)
                     var jsonArray = result.body.object
